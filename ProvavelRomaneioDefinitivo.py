@@ -193,6 +193,34 @@ def imagem_encontrada(image_path, confidence=0.9, max_attempts=5):
             print("Nota não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def botao_copy(image_path,image_path2, confidence=0.9):
+    current_dir = os.path.dirname(__file__)  # Diretório atual do script
+    caminho_imagem = caminho + r'\IMAGENS'
+    image_path = os.path.join(current_dir, caminho_imagem, image_path)
+    image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
+    while True:
+        try:
+            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+            if position:
+                center_x = position.left + position.width // 2
+                center_y = position.top + position.height // 2
+                pyautogui.click(center_x, center_y)
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        try:
+            position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
+            if position2:
+                center_x = position2.left + position2.width // 2
+                center_y = position2.top + position2.height // 2
+                pyautogui.click(center_x, center_y)
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        pyautogui.sleep(1)
+        
 def verificar_campo(image_name, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = os.path.join(current_dir, 'IMAGENS')
@@ -569,18 +597,18 @@ if not Planilha_cc19.empty:
 
     # Encontrar os índices onde 'Depósito' tem valor 'Bairro'
     bairro_indices = Planilha_cc19[Planilha_cc19['Depósito'].isin(['Bairro', 'Observação'])].index
-
+    
     # Preencher a coluna 'KM' da linha correspondente com o valor da linha acima
     for idx in bairro_indices:
         if idx > 0:
             Planilha_cc19.loc[idx, 'KM'] = Planilha_cc19.loc[idx - 1, 'Distância (km)']
-
+    
     # Propagar os valores para baixo na coluna 'KM'
     Planilha_cc19['KM'] = Planilha_cc19['KM'].fillna(method='ffill')
-
+    
 # Filtrar as linhas onde a coluna 'Cidade' não é vazia
 Planilha_cc19 = Planilha_cc19.dropna(subset=['Cidade'])
-
+Planilha_cc19['KM'] = Planilha_cc19['KM'].fillna(1)
 # Garantir que os valores sejam strings antes de dividir
 Planilha_cc19['Custo Quantidade Atividades'] = Planilha_cc19['Custo Quantidade Atividades'].astype(str)
 
@@ -756,7 +784,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    click_image('copy.png')
+    # click_image('copy.png')
+    botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -772,7 +801,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    click_image('copy.png')
+    #click_image('copy.png')
+    botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -842,7 +872,8 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.sleep(2)
         pyautogui.click(button='right')
         pyautogui.sleep(1)
-        click_image('copy.png')
+        #click_image('copy.png')
+        botao_copy('copy2.png','copy_cinza.png')
         pyautogui.sleep(0.5)
         try:
             text = pyperclip.paste()
@@ -903,7 +934,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    click_image('copy.png')
+    #click_image('copy.png')
+    botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -992,7 +1024,10 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.sleep(5)
         click_image('efetuar.png')
         click_image('no.png')
-        click_image('ok.png')
+
+        #click_image('ok.png')
+        click_image('ok4.png')
+        
     else:
         pyautogui.sleep(3)
         click_image('guia_geral.png')
@@ -1002,7 +1037,7 @@ for _, row in Planilha_romaneio.iterrows():
         click_image('guia_geral.png')
         pyautogui.sleep(2)
     print("")
-    # pyautogui.sleep(5)
+    pyautogui.sleep(5)
 
 #Escrever o DataFrame vazio na planilha
 Planilha_reenvio = pd.DataFrame(columns=Planilha_reenvio.columns)

@@ -26,6 +26,34 @@ def click_image(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def botao_copy(image_path,image_path2, confidence=0.9):
+    current_dir = os.path.dirname(__file__)  # Diretório atual do script
+    caminho_imagem = caminho + r'\IMAGENS'
+    image_path = os.path.join(current_dir, caminho_imagem, image_path)
+    image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
+    while True:
+        try:
+            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+            if position:
+                center_x = position.left + position.width // 2
+                center_y = position.top + position.height // 2
+                pyautogui.click(center_x, center_y)
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        try:
+            position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
+            if position2:
+                center_x = position2.left + position2.width // 2
+                center_y = position2.top + position2.height // 2
+                pyautogui.click(center_x, center_y)
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        pyautogui.sleep(1)
+
 def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -57,7 +85,8 @@ def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
                 pyautogui.sleep(1)
                 click_image('ok5.png')
                 pyautogui.sleep(1)
-                click_image('ok.png')
+                #click_image('ok.png')
+                click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('nao.png')
                 pyautogui.sleep(2)
@@ -79,7 +108,8 @@ def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
                 pyautogui.sleep(1)
                 click_image('ok5.png')
                 pyautogui.sleep(1)
-                click_image('ok.png')
+                #click_image('ok.png')
+                click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('nao.png')
                 pyautogui.sleep(2)
@@ -114,8 +144,11 @@ def quantidade_registros():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    click_image('copy.png')
+
+    #click_image('copy.png')
+    botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
+
     click_image('buscar_filtros.png')
 
     try:
@@ -298,6 +331,16 @@ def click_registros(image_path, confidence=0.9):
 
 mudou = False
 Planilha_Manifesto = pd.read_excel("planilha_romaneio.xlsx")
+
+click_image('faturamento.png')
+pyautogui.sleep(0.5)
+click_image('faturamento_movimentacao.png')
+pyautogui.sleep(0.5)
+click_image('faturamento_movimentacao_manifesto.png')
+pyautogui.sleep(0.5)
+click_image('faturamento_movimentacao_manifesto_emissao.png')
+pyautogui.sleep(5)
+
 click_image('buscar.png')
 pyautogui.sleep(3)
 for i, linha in enumerate(Planilha_Manifesto.index):
@@ -418,7 +461,10 @@ for i, linha in enumerate(Planilha_Manifesto.index):
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    click_image('copy.png')
+
+    #click_image('copy.png')
+    botao_copy('copy2.png','copy_cinza.png')
+
     pyautogui.sleep(0.5)
     try:
         # Pega o conteúdo da área de transferência
