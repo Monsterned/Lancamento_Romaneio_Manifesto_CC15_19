@@ -85,8 +85,8 @@ def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
                 pyautogui.sleep(1)
                 click_image('ok5.png')
                 pyautogui.sleep(1)
-                #click_image('ok.png')
-                click_image('ok4.png')
+                click_image('ok.png')
+                #click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('nao.png')
                 pyautogui.sleep(2)
@@ -108,8 +108,8 @@ def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
                 pyautogui.sleep(1)
                 click_image('ok5.png')
                 pyautogui.sleep(1)
-                #click_image('ok.png')
-                click_image('ok4.png')
+                click_image('ok.png')
+                #click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('nao.png')
                 pyautogui.sleep(2)
@@ -145,8 +145,8 @@ def quantidade_registros():
     pyautogui.click(button='right')
     pyautogui.sleep(1)
 
-    #click_image('copy.png')
-    botao_copy('copy2.png','copy_cinza.png')
+    click_image('copy.png')
+    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
 
     click_image('buscar_filtros.png')
@@ -390,31 +390,6 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         pyautogui.sleep(1)
         click_image('buscar_filtros.png')
     
-    #transformar em uma função
-    # click_image('atualizar_pesquisa.png')
-    # pyautogui.sleep(5)   
-    # click_registros('buscar_registro.png')
-    # pyperclip.copy('')  # Limpa o conteúdo copiado
-    # pyautogui.sleep(2)
-    # pyautogui.click(button='right')
-    # pyautogui.sleep(1)
-    # click_image('copy.png')
-    # pyautogui.sleep(0.5)
-    # click_image('buscar_filtros.png')
-
-    # try:
-    #     text = pyperclip.paste()  # Obtém o texto da área de transferência
-    #     qtd_registros = int(text)  # Converte o texto para um número inteiro
-    #     print("Quantidade de manifestos:", qtd_registros)
-
-    # except ValueError:
-    #     print("O conteúdo copiado não é um número válido.")
-    #     qtd_registros = None  # Define como None se a conversão falhar
-        
-    # except Exception as e:
-    #     print("Ocorreu um erro:", str(e))
-    #     qtd_registros = None  # Define como None para qualquer outro erro
-
     qtd_registros = quantidade_registros()
 
     #INCLUIR PARA MANIFESTOS NAO BAIXADOS POREM JA ENCERRADOS NO SEFAZ
@@ -426,23 +401,48 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         click_image('situacao_manifesto_cadastrado.png')
         qtd_registros = quantidade_registros()
         mudou = True
-
     pyautogui.sleep(1)
 
     if qtd_registros is None:
         click_info('situacao_manifesto.png')
         click_image('situacao_manifesto_emitido.png')
         qtd_registros = quantidade_registros()
-    pyautogui.sleep(1)
+        pyautogui.sleep(1)
+
+    #manifesto nao enviado pro sefaz(cadastrado/mdfe nao autorizado)
+    if qtd_registros is None:
+        click_info('mdfe_encerrado.png')
+        pyautogui.sleep(1)
+        click_image('opcao_nao.png')
+        click_image('buscar_mais_filtros.png')
+        pyautogui.sleep(1)
+        click_info('buscar_mais_filtros_autorizado.png')
+        pyautogui.sleep(1)
+        click_image('buscar_mais_filtros_autorizado_sim.png')
+        pyautogui.sleep(1)
+        click_image('buscar_filtros.png')
+        qtd_registros = quantidade_registros()
+        pyautogui.sleep(1)
 
     # Verifica se qtd_registros é None
     if qtd_registros is None:
         print('Ir para o próximo')
-        click_info('mdfe_encerrado.png')
-        pyautogui.sleep(1)
-        click_image('opcao_nao.png')
+        # click_info('mdfe_encerrado.png')
+        # pyautogui.sleep(1)
+        # click_image('opcao_nao.png')
         pyautogui.sleep(0.5)
-        click_image('situacao_manifesto.png')
+        click_info('situacao_manifesto.png')
+        pyautogui.sleep(1.5)
+        pyautogui.moveRel(0, 5)
+        pyautogui.click()
+        pyautogui.sleep(0.5)
+        click_image('buscar_mais_filtros.png')
+        pyautogui.sleep(1)
+        click_info('buscar_mais_filtros_autorizado.png')
+        pyautogui.sleep(1)
+        click_image('buscar_mais_filtros_autorizado_sim.png')
+        pyautogui.sleep(1)
+        click_image('buscar_filtros.png')
         #colocar em branco
         continue
 

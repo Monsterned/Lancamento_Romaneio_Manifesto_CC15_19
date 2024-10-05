@@ -27,27 +27,27 @@ def click_image(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
-def efetuar(image_path,image_path2,image_path3, confidence=0.9):
+#status = efetuar('ficha_nao_aberta.png','ctes_mesmo_dia.png','deseja_apagar_valores.png') image_path4 = IMAGEM APOS O NO EM DESEJA APAGAR VALORES
+def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
     image_path = os.path.join(current_dir, caminho_imagem, image_path)
     image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
     image_path3 = os.path.join(current_dir, caminho_imagem, image_path3)
+    image_path4 = os.path.join(current_dir, caminho_imagem, image_path4)
     status = False  # Variável de controle para saber se a imagem 4 foi encontrada
     while True:
-        
-        
         try:
             position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
             if position2:
                 print("Imagem foi encontrada na tela.")
-                pyautogui.press('left')
+                # pyautogui.press('left')
                 click_image('yes2.png')
                 pyautogui.sleep(2)
                 click_image('no.png')
                 pyautogui.sleep(2)
-                #click_image('ok2.png')
-                click_image('ok4.png')
+                click_image('ok2.png')
+                #click_image('ok4.png')
                 pyautogui.sleep(5)
                 break
         except Exception as e:
@@ -56,34 +56,77 @@ def efetuar(image_path,image_path2,image_path3, confidence=0.9):
         try:
             position3 = pyautogui.locateOnScreen(image_path3, confidence=confidence)
             if position3:
-                pyautogui.press('left')
+                # pyautogui.press('left')
                 click_image('no.png')
                 pyautogui.sleep(10)
-                try:
-                    position = pyautogui.locateOnScreen(image_path, confidence=confidence)
-                    if position:
+                # try:
+                #     position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+                #     if position:
+                #         print("Imagem foi encontrada na tela.")
+                #         click('ok2.png')
+                #         #click_image('ok4.png')
+                #         caminho_do_arquivo = 'planilha_romaneio.xlsx'
+                #         nome_da_aba = 'Sheet1'
+                #         wb = load_workbook(caminho_do_arquivo)
+                #         ws = wb[nome_da_aba]
+                #         coluna_ost = 'H'  
+                #         if linha > ws.max_row:
+                #             ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
+                #         else:
+                #             ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
+                #         wb.save(caminho_do_arquivo)
+                #         wb.close()
+                #         status = True  # Define como None se a conversão falhar
+                #         break
+                # except Exception as e:
+                #     click_image('ok2.png')
+                #     #click_image('ok4.png')
+                #     pyautogui.sleep(5)
+                #     print("Imagem foi encontrada na tela.")
+                #     break
+
+
+
+
+                while True:
+                    try:
+                        position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+                        if position:
+                            print("Imagem foi encontrada na tela.")
+                            click('ok2.png')
+                            #click_image('ok4.png')
+                            caminho_do_arquivo = 'planilha_romaneio.xlsx'
+                            nome_da_aba = 'Sheet1'
+                            wb = load_workbook(caminho_do_arquivo)
+                            ws = wb[nome_da_aba]
+                            coluna_ost = 'H'  
+                            if linha > ws.max_row:
+                                ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
+                            else:
+                                ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
+                            wb.save(caminho_do_arquivo)
+                            wb.close()
+                            status = True  # Define como None se a conversão falhar
+                            break
+                    except Exception as e:
                         print("Imagem foi encontrada na tela.")
-                        #click('ok2.png')
-                        click_image('ok4.png')
-                        caminho_do_arquivo = 'planilha_romaneio.xlsx'
-                        nome_da_aba = 'Sheet1'
-                        wb = load_workbook(caminho_do_arquivo)
-                        ws = wb[nome_da_aba]
-                        coluna_ost = 'H'  
-                        if linha > ws.max_row:
-                            ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
-                        else:
-                            ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
-                        wb.save(caminho_do_arquivo)
-                        wb.close()
-                        status = True  # Define como None se a conversão falhar
-                        break
-                except Exception as e:
-                    #click_image('ok2.png')
-                    click_image('ok4.png')
-                    pyautogui.sleep(5)
-                    print("Imagem foi encontrada na tela.")
-                    break
+                    
+                    try:
+                        position4 = pyautogui.locateOnScreen(image_path4, confidence=confidence)
+                        if position4:
+                            click_image('ok2.png')
+                            #click_image('ok4.png')
+                            pyautogui.sleep(5)
+                            print("Imagem foi encontrada na tela.")
+                            break
+                    except:
+                        print('')
+
+
+
+
+
+
 
         except Exception as e:
             print("Imagem não encontrada na tela. Aguardando...")
@@ -91,11 +134,12 @@ def efetuar(image_path,image_path2,image_path3, confidence=0.9):
 
     return status
 
-def status_sefaz(image_path,image_path2, confidence=0.9):
+def status_sefaz(image_path,image_path2,image_path3, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
     image_path = os.path.join(current_dir, caminho_imagem, image_path)
     image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
+    image_path3 = os.path.join(current_dir, caminho_imagem, image_path3)
     while True:
         try:
             position = pyautogui.locateOnScreen(image_path, confidence=confidence)
@@ -107,7 +151,7 @@ def status_sefaz(image_path,image_path2, confidence=0.9):
         try:
             position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
             if position2:
-                print("Manifesto autorizado no sefaz.")
+                print("Manifesto não autorizado no sefaz.")
                 caminho_do_arquivo = 'planilha_romaneio.xlsx'
                 nome_da_aba = 'Sheet1'
                 wb = load_workbook(caminho_do_arquivo)
@@ -117,6 +161,24 @@ def status_sefaz(image_path,image_path2, confidence=0.9):
                     ws[coluna_ost + str(linha_especifica)] = 'SEM CIOT, NAO AUTORIZADO NO SEFAZ'
                 else:
                     ws[coluna_ost + str(linha_especifica)] = 'SEM CIOT, NAO AUTORIZADO NO SEFAZ'
+                wb.save(caminho_do_arquivo)
+                wb.close()
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        try:
+            position3 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
+            if position3:
+                print("Manifesto não autorizado no sefaz.")
+                caminho_do_arquivo = 'planilha_romaneio.xlsx'
+                nome_da_aba = 'Sheet1'
+                wb = load_workbook(caminho_do_arquivo)
+                ws = wb[nome_da_aba]
+                coluna_ost = 'H'  
+                if linha > ws.max_row:
+                    ws[coluna_ost + str(linha_especifica)] = 'NAO AUTORIZADO NO SEFAZ'
+                else:
+                    ws[coluna_ost + str(linha_especifica)] = 'NAO AUTORIZADO NO SEFAZ'
                 wb.save(caminho_do_arquivo)
                 wb.close()
                 break
@@ -171,8 +233,8 @@ def click_inclusao_romaneio(image_path,image_path2,image_path3, confidence=0.9):
             position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
             if position2:
                 print("Aviso de romaneio ja incluido")
-                #click_image('ok2.png')
-                click_image('ok4.png')
+                click_image('ok2.png')
+                #click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('guia_geral_manifesto.png')
                 pyautogui.sleep(5)
@@ -331,19 +393,7 @@ for i, linha in enumerate(Planilha_Manifesto.index):
     click_image('tipo_distribuicao.png')
     click_info('man_placa.png')
     pyautogui.sleep(1)
-    # pyautogui.press('f2')
-    # click_info('man_placa_pesquisa.png')
     pyautogui.write(str(placa))
-    # pyautogui.sleep(2)
-    # pyautogui.press('tab')
-    # click_info('situacao_veiculo.png')
-    # pyautogui.sleep(1)
-    # click_image('situacao_veiculo_normal.png')
-    # pyautogui.sleep(1)
-    # click_image('atualizar.png')
-    # pyautogui.sleep(2)
-    # click_image('selecionar.png')
-    # pyautogui.sleep(2)
     pyautogui.press('tab')
     pyautogui.sleep(4)
 
@@ -419,7 +469,6 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         print(f"O arquivo {file_name} não foi encontrado.")
         df = pd.DataFrame(columns=['ROMANEIO', 'PLACA', 'MANIFESTO'])
 
-    print(linha)
     # Atualizar o valor da coluna 'MANIFESTO' na linha encontrada
     df.at[linha, 'MANIFESTO'] = manifesto
 
@@ -451,21 +500,18 @@ for i, linha in enumerate(Planilha_Manifesto.index):
     pyautogui.sleep(3)
     click_image('botao_recalculo.png')
     pyautogui.sleep(2)
-    #click_image('ok3.png')
-                    
-    click_image('ok4.png')
+
+    click_image('ok3.png')         
+    #click_image('ok4.png')
+
     pyautogui.sleep(10)
     click_image('botao_efetuar_manifesto.png')
     pyautogui.sleep(4)
-    # pyautogui.press('left')
-    # click_image('no.png')
+
     status = efetuar('ficha_nao_aberta.png','ctes_mesmo_dia.png','deseja_apagar_valores.png')
     if status is True:
         status = False
         continue
-    # click_image('no.png')
-    # pyautogui.sleep(2)
-    # click_image('ok2.png')
     
     pyautogui.sleep(5)
     click_image('enviar_sefaz.png')
@@ -475,12 +521,11 @@ for i, linha in enumerate(Planilha_Manifesto.index):
     pyautogui.press('left')
     click_image('yes2.png')
     pyautogui.sleep(2)
-
-    
+ 
 
     #EMISSAO DE MANIFESTO POSSIVEIS ERROS
     #FICHA,CIOT, SEFAZ
-    status_sefaz('manifesto_autorizado_sefaz.png','sem_ciot.png')
+    status_sefaz('manifesto_autorizado_sefaz.png','sem_ciot.png','erro_sefaz_1.png')
     pyautogui.sleep(5)
     click_image('sair_tela_sefaz.png')
     pyautogui.sleep(5)
@@ -488,10 +533,3 @@ for i, linha in enumerate(Planilha_Manifesto.index):
 
 
 
-
-    #teste de repetição
-    # click_image('ok2.png')
-    # pyautogui.sleep(1)
-    # click_image('guia_geral_manifesto.png')
-    # print('proximo')
-    # pyautogui.sleep(5)

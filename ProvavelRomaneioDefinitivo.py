@@ -359,8 +359,10 @@ def confirmacao_doc_incluido(image_path,image_path2,image_path3, confidence=0.9)
                 pyautogui.sleep(0.5)
                 pyautogui.press('tab')
                 click_image('atualizar_entregas.png')
+                pyautogui.sleep(3)
                 if imagem_encontrada('nota_encontrada.png'):
                     click_image('salvar_filial.png')
+                    pyautogui.sleep(time)
                     pyautogui.write("1")
                     pyautogui.sleep(time)       
                     click_image('salvar_ocorrencia.png')
@@ -715,7 +717,7 @@ for _, row in Planilha_romaneio.iterrows():
     if isinstance(ctes_por_cidade, str):
         # Convertendo string formatada em lista
         ctes_por_cidade = eval(ctes_por_cidade)  # Ou outra forma segura de conversão
-    
+    info_faltantes = False
     motorista_lancamento = motorista_lancamento.rstrip()
     if 'Ç' in motorista_lancamento:
         motorista_lancamento = motorista_lancamento.replace("Ç", "C")
@@ -751,6 +753,36 @@ for _, row in Planilha_romaneio.iterrows():
         
     print(f'motorista:{motorista_lancamento} placa: {placa} cidade mais longe:{cidade_mais_longe} km:{km_veiculo}')
     
+    for cidade, ctes in ctes_por_cidade_dict.items():
+        # Usar set() para remover duplicatas
+        ctes_unicos = set(ctes)
+        for cte in ctes_unicos:
+            if cte:  # Verificar se não está vazio
+                # Lançar cada CTe único para a placa e cidade
+                try:
+                    cte = int(float(cte))
+                except:
+                    print('Faltando informações')
+                    info_faltantes = True
+                    break
+
+    if info_faltantes ==True:
+        romaneio = 'INFORMAÇÕES FALTANTES'
+        # Verificar se o arquivo já existe
+        try:
+            df = pd.read_excel(file_name)
+        except FileNotFoundError:
+            # Criar um DataFrame com as colunas ROMANEIO e PLACA, caso o arquivo não exista
+            df = pd.DataFrame(columns=['DATA', 'ROMANEIO', 'PLACA', 'CIDADE'])
+        # Adicionar o número do romaneio e a placa à planilha
+        new_row = pd.DataFrame({'DATA': [agora_formatado], 'ROMANEIO': [romaneio], 'PLACA': [placa], 'CIDADE': [cidade_mais_longe]})
+        df = pd.concat([df, new_row], ignore_index=True)
+        # Salvar a planilha
+        df.to_excel(file_name, index=False)
+        print(f"Número do romaneio {romaneio} e placa {placa} salvos na planilha {file_name}.")
+
+        continue  # Pula para a próxima iteração do for
+
     #COPIAR A PLACA TAMBEM E SALVAR
     click_image('incluir.png')
     pyautogui.sleep(2)
@@ -784,8 +816,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    # click_image('copy.png')
-    botao_copy('copy2.png','copy_cinza.png')
+    click_image('copy.png')
+    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -801,8 +833,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    #click_image('copy.png')
-    botao_copy('copy2.png','copy_cinza.png')
+    click_image('copy.png')
+    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -872,8 +904,8 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.sleep(2)
         pyautogui.click(button='right')
         pyautogui.sleep(1)
-        #click_image('copy.png')
-        botao_copy('copy2.png','copy_cinza.png')
+        click_image('copy.png')
+        #botao_copy('copy2.png','copy_cinza.png')
         pyautogui.sleep(0.5)
         try:
             text = pyperclip.paste()
@@ -934,8 +966,8 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.sleep(2)
     pyautogui.click(button='right')
     pyautogui.sleep(1)
-    #click_image('copy.png')
-    botao_copy('copy2.png','copy_cinza.png')
+    click_image('copy.png')
+    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -1025,8 +1057,8 @@ for _, row in Planilha_romaneio.iterrows():
         click_image('efetuar.png')
         click_image('no.png')
 
-        #click_image('ok.png')
-        click_image('ok4.png')
+        click_image('ok.png')
+        #click_image('ok4.png')
         
     else:
         pyautogui.sleep(3)
