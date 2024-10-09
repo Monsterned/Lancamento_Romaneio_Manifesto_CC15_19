@@ -710,7 +710,7 @@ pyautogui.sleep(0.5)
 
 # Automatizar o lançamento de cada CTe individualmente
 for _, row in Planilha_romaneio.iterrows():
-    placa = row['PLACA']
+    placa_lancamento = row['PLACA']
     motorista_lancamento = row['NOME MOTORISTA']
     km_veiculo = row['KM']
     ctes_por_cidade = row['CTES']
@@ -725,8 +725,8 @@ for _, row in Planilha_romaneio.iterrows():
         motorista_lancamento = motorista_lancamento.replace("ç", "c")
     motorista_lancamento = unidecode(motorista_lancamento)
     motorista_lancamento = ' '.join(motorista_lancamento.split())
-    placa = str(placa)
-    placa = placa.translate(str.maketrans('', '', '*-_& '))
+    placa_lancamento = str(placa_lancamento)
+    placa_lancamento = placa_lancamento.translate(str.maketrans('', '', '*-_& '))
     km = 0
     # Criar um dicionário para agrupar CTes por cidade
     ctes_por_cidade_dict = {}
@@ -743,15 +743,16 @@ for _, row in Planilha_romaneio.iterrows():
         if cidade not in ctes_por_cidade_dict:
             ctes_por_cidade_dict[cidade] = []
         ctes_por_cidade_dict[cidade].extend(ctes)
-
+        cidade = cidade.upper()
+        
         if cidade in Planilha_cidades['Cidade Destino'].values:
             base_km = Planilha_cidades.loc[Planilha_cidades[Planilha_cidades['Cidade Destino'] == cidade].index.values, 'KM (origem Sumaré)'].values[0]
-
+        
         if base_km > km:
             km = base_km
             cidade_mais_longe = cidade
         
-    print(f'motorista:{motorista_lancamento} placa: {placa} cidade mais longe:{cidade_mais_longe} km:{km_veiculo}')
+    print(f'motorista:{motorista_lancamento} placa: {placa_lancamento} cidade mais longe:{cidade_mais_longe} km:{km_veiculo}')
     
     for cidade, ctes in ctes_por_cidade_dict.items():
         # Usar set() para remover duplicatas
@@ -775,11 +776,11 @@ for _, row in Planilha_romaneio.iterrows():
             # Criar um DataFrame com as colunas ROMANEIO e PLACA, caso o arquivo não exista
             df = pd.DataFrame(columns=['DATA', 'ROMANEIO', 'PLACA', 'CIDADE'])
         # Adicionar o número do romaneio e a placa à planilha
-        new_row = pd.DataFrame({'DATA': [agora_formatado], 'ROMANEIO': [romaneio], 'PLACA': [placa], 'CIDADE': [cidade_mais_longe]})
+        new_row = pd.DataFrame({'DATA': [agora_formatado], 'ROMANEIO': [romaneio], 'PLACA': [placa_lancamento], 'CIDADE': [cidade_mais_longe]})
         df = pd.concat([df, new_row], ignore_index=True)
         # Salvar a planilha
         df.to_excel(file_name, index=False)
-        print(f"Número do romaneio {romaneio} e placa {placa} salvos na planilha {file_name}.")
+        print(f"Número do romaneio {romaneio} e placa {placa_lancamento} salvos na planilha {file_name}.")
 
         continue  # Pula para a próxima iteração do for
 
@@ -793,7 +794,7 @@ for _, row in Planilha_romaneio.iterrows():
     click_info('campo_veiculo.png')
     pyautogui.press('F2')
     click_info('placa.png')
-    pyautogui.write(str(placa))
+    pyautogui.write(str(placa_lancamento))
     pyautogui.sleep(2)
     pyautogui.press('tab')
     click_info('situacao_veiculo.png')
@@ -827,6 +828,8 @@ for _, row in Planilha_romaneio.iterrows():
         print("O conteúdo copiado não é um número válido.")
     except Exception as e:
         print("Ocorreu um erro:", str(e))
+    if placa == '':
+        placa = placa_lancamento
 
     pyperclip.copy('')  # Limpa o conteúdo copiado
     click_info('motorista_romaneio.png')
@@ -1084,3 +1087,5 @@ if dados_para_reenvio:
 else:
     print("Nenhuma condição atendida para reenvio.")
 print("Automatização concluída com sucesso!")
+
+click_image('voltar.png')
