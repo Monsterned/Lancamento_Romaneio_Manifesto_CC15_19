@@ -7,6 +7,8 @@ from datetime import datetime
 from datetime import datetime, timedelta
 import sys
 from openpyxl import load_workbook
+import tkinter as tk
+from tkinter import messagebox
 
 caminho = os.getcwd() 
 
@@ -301,6 +303,13 @@ def click_registros(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+# Função para exibir uma mensagem de sucesso
+def show_success_message(msg):
+    root = tk.Tk()
+    root.withdraw()  # Oculta a janela principal
+    messagebox.showinfo("Lancamento Baixa de Manifesto", msg)  # Exibe o título e a mensagem
+    root.destroy()  # Fecha a janela após exibir a mensagem
+
 mudou = False
 Planilha_Manifesto = pd.read_excel("planilha_romaneio.xlsx")
 
@@ -537,3 +546,9 @@ for i, linha in enumerate(Planilha_Manifesto.index):
 click_image('buscar_voltar.png')
 
 
+
+# Simulando o final do código
+if __name__ == "_main_":
+    # Aqui você pode adicionar seu código que será executado
+    # e ao final, chamará a função para exibir a mensagem
+    show_success_message("Robô finalizado com sucesso")

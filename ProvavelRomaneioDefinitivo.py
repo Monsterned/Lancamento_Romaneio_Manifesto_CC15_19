@@ -536,8 +536,15 @@ def is_numeric_or_empty(value):
         return True
     return False
 
+# Função para exibir uma mensagem de sucesso
+def show_success_message(msg):
+    root = tk.Tk()
+    root.withdraw()  # Oculta a janela principal
+    messagebox.showinfo("Lancamento Romaneio", msg)  # Exibe o título e a mensagem
+    root.destroy()  # Fecha a janela após exibir a mensagem
+
 # Carregar a planilha
-Planilha_cc19 = pd.read_excel("Pasta2.xlsx")
+Planilha_cc19 = pd.read_excel("Base.xlsx")
 
 # Verificar se "Veículo" é uma coluna válida antes de usar
 if 'Veículo' not in Planilha_cc19.columns:
@@ -552,12 +559,7 @@ else:
     # Localiza onde a coluna tem o valor "Veículo"
     index_veiculo = Planilha_cc19[Planilha_cc19['Veículo'] == 'Veículo'].index
 
-    # Função para exibir uma mensagem de sucesso
-    def show_success_message(msg):
-        root = tk.Tk()
-        root.withdraw()  # Oculta a janela principal
-        messagebox.showinfo("Lancamento Romaneio", msg)  # Exibe o título e a mensagem
-        root.destroy()  # Fecha a janela após exibir a mensagem
+
 
     # Itera sobre os índices e verifica o valor da linha abaixo de cada "Veículo"
     for idx in index_veiculo:
@@ -1160,3 +1162,9 @@ else:
 print("Automatização concluída com sucesso!")
 
 click_image('voltar.png')
+
+# Simulando o final do código
+if __name__ == "_main_":
+    # Aqui você pode adicionar seu código que será executado
+    # e ao final, chamará a função para exibir a mensagem
+    show_success_message("Robô finalizado com sucesso")

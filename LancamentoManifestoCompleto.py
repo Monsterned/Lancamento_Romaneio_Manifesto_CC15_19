@@ -9,6 +9,8 @@ import sys
 from openpyxl import load_workbook
 import math
 from unidecode import unidecode
+import tkinter as tk
+from tkinter import messagebox
 
 caminho = os.getcwd() 
 
@@ -338,6 +340,13 @@ def salvar_base_romaneio():
     wb.save(caminho_do_arquivo)
     wb.close()
 
+# Função para exibir uma mensagem de sucesso
+def show_success_message(msg):
+    root = tk.Tk()
+    root.withdraw()  # Oculta a janela principal
+    messagebox.showinfo("Lancamento Manifesto", msg)  # Exibe o título e a mensagem
+    root.destroy()  # Fecha a janela após exibir a mensagem
+
 Planilha_Manifesto = pd.read_excel("planilha_romaneio.xlsx")
 Planilha_cidades = pd.read_excel("Linhas_Codhorario.xlsx")
 
@@ -562,3 +571,8 @@ pyautogui.sleep(5)
 
 click_image('voltar.png')
 
+# Simulando o final do código
+if __name__ == "_main_":
+    # Aqui você pode adicionar seu código que será executado
+    # e ao final, chamará a função para exibir a mensagem
+    show_success_message("Robô finalizado com sucesso")
