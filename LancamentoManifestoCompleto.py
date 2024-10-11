@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import sys
 from openpyxl import load_workbook
 import math
+from unidecode import unidecode
 
 caminho = os.getcwd() 
 
@@ -28,7 +29,6 @@ def click_image(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
-#status = efetuar('ficha_nao_aberta.png','ctes_mesmo_dia.png','deseja_apagar_valores.png') image_path4 = IMAGEM APOS O NO EM DESEJA APAGAR VALORES
 def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -43,13 +43,11 @@ def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
             position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
             if position2:
                 print("Imagem foi encontrada na tela.")
-                # pyautogui.press('left')
                 click_image('yes2.png')
                 pyautogui.sleep(2)
                 click_image('no.png')
                 pyautogui.sleep(2)
                 click_image('ok2.png')
-                #click_image('ok4.png')
                 pyautogui.sleep(5)
                 break
         except Exception as e:
@@ -58,37 +56,8 @@ def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
         try:
             position3 = pyautogui.locateOnScreen(image_path3, confidence=confidence)
             if position3:
-                # pyautogui.press('left')
                 click_image('no.png')
                 pyautogui.sleep(10)
-                # try:
-                #     position = pyautogui.locateOnScreen(image_path, confidence=confidence)
-                #     if position:
-                #         print("Imagem foi encontrada na tela.")
-                #         click('ok2.png')
-                #         #click_image('ok4.png')
-                #         caminho_do_arquivo = 'planilha_romaneio.xlsx'
-                #         nome_da_aba = 'Sheet1'
-                #         wb = load_workbook(caminho_do_arquivo)
-                #         ws = wb[nome_da_aba]
-                #         coluna_ost = 'H'  
-                #         if linha > ws.max_row:
-                #             ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
-                #         else:
-                #             ws[coluna_ost + str(linha_especifica)] = 'SEM FICHA DE TRAFEGO'
-                #         wb.save(caminho_do_arquivo)
-                #         wb.close()
-                #         status = True  # Define como None se a conversão falhar
-                #         break
-                # except Exception as e:
-                #     click_image('ok2.png')
-                #     #click_image('ok4.png')
-                #     pyautogui.sleep(5)
-                #     print("Imagem foi encontrada na tela.")
-                #     break
-
-
-
 
                 while True:
                     try:
@@ -96,7 +65,6 @@ def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
                         if position:
                             print("Imagem foi encontrada na tela.")
                             click('ok2.png')
-                            #click_image('ok4.png')
                             caminho_do_arquivo = 'planilha_romaneio.xlsx'
                             nome_da_aba = 'Sheet1'
                             wb = load_workbook(caminho_do_arquivo)
@@ -118,7 +86,6 @@ def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
                         position4 = pyautogui.locateOnScreen(image_path4, confidence=confidence)
                         if position4:
                             click_image('ok2.png')
-                            #click_image('ok4.png')
                             pyautogui.sleep(5)
                             print("Imagem foi encontrada na tela.")
                             efetuado = True
@@ -127,13 +94,6 @@ def efetuar(image_path,image_path2,image_path3,image_path4, confidence=0.9):
                         print('')
             if efetuado == True:
                 break
-
-
-
-
-
-
-
         except Exception as e:
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
@@ -205,7 +165,6 @@ def click_inclusao_romaneio(image_path,image_path2,image_path3, confidence=0.9):
             if position2:
                 print("Aviso de romaneio ja incluido")
                 click_image('ok2.png')
-                #click_image('ok4.png')
                 pyautogui.sleep(1)
                 click_image('guia_geral_manifesto.png')
                 pyautogui.sleep(5)
@@ -216,7 +175,6 @@ def click_inclusao_romaneio(image_path,image_path2,image_path3, confidence=0.9):
                 pyautogui.sleep(1)
                 click_image('verdinho.png')
                 pyautogui.sleep(3)
-                #click_image('yes2.png')
                 if tentativa == False:
                     click_inclusao_romaneio('verdinho_todo_cinza.png', 'aviso_ja_entregue.png')
                 else:
@@ -372,7 +330,7 @@ def salvar_base_romaneio():
     nome_da_aba = 'Sheet1'
     wb = load_workbook(caminho_do_arquivo)
     ws = wb[nome_da_aba]
-    coluna_ost = 'H'  
+    coluna_ost = 'I'  
     if linha > ws.max_row:
         ws[coluna_ost + str(linha_especifica)] = 'CIDADE NAO CONSTA NA BASE OU SEM CADASTRO'
     else:
@@ -415,6 +373,12 @@ for i, linha in enumerate(Planilha_Manifesto.index):
     motorista = int(float(motorista))
     liberado = Planilha_Manifesto.loc[linha, "STATUS"]
     liberado = str(liberado)
+
+    if 'Ç' in cidade:
+        cidade = cidade.replace("Ç", "C")
+    elif('ç' in cidade):
+        cidade = cidade.replace("ç", "c")
+    cidade = unidecode(cidade)
     if liberado.lower() == 'nan':
         
         if romaneio == 'AVISO DE MOTORISTA OU VEICULO':
@@ -422,6 +386,7 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         if cidade in Planilha_cidades['Cidade Destino'].values:
             linha_man = Planilha_cidades.loc[Planilha_cidades[Planilha_cidades['Cidade Destino'] == cidade].index.values, 'LINHA'].values[0]
             cod_horario = Planilha_cidades.loc[Planilha_cidades[Planilha_cidades['Cidade Destino'] == cidade].index.values, 'COD HORARIO'].values[0]
+            
             if pd.isna(linha_man) or pd.isna(cod_horario):
                 print('Sem linha e código de horário cadastrado')
                 salvar_base_romaneio()
@@ -430,6 +395,8 @@ for i, linha in enumerate(Planilha_Manifesto.index):
             print('Cidade não consta na base')
             salvar_base_romaneio()
             continue
+
+        cod_horario = int(cod_horario)
         print(f'placa: {placa} romaneio:{romaneio} cidade:{cidade} linha:{linha_man} cod horario:{cod_horario}')
             
         click_image('incluir.png')
@@ -564,10 +531,8 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         pyautogui.sleep(3)
         click_image('botao_recalculo.png')
         pyautogui.sleep(2)
-
         click_image('ok3.png')         
         #click_image('ok4.png')
-
         pyautogui.sleep(10)
         click_image('botao_efetuar_manifesto.png')
         pyautogui.sleep(4)
@@ -585,7 +550,6 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         pyautogui.press('left')
         click_image('yes2.png')
         pyautogui.sleep(2)
-    
 
         #EMISSAO DE MANIFESTO POSSIVEIS ERROS
         #FICHA,CIOT, SEFAZ
@@ -593,7 +557,6 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         pyautogui.sleep(5)
         click_image('sair_tela_sefaz.png')
         pyautogui.sleep(5)
-
 
 pyautogui.sleep(5)
 

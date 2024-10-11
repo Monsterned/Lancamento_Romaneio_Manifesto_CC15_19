@@ -53,34 +53,6 @@ def finalizar_baixa(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(0.5)
 
-def click_yes(image_path,image_path2, confidence=0.9):
-    current_dir = os.path.dirname(__file__)  # Diretório atual do script
-    caminho_imagem = caminho + r'\IMAGENS'
-    image_path = os.path.join(current_dir, caminho_imagem, image_path)
-    image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
-    while True:
-        try:
-            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
-            if position:
-                center_x = position.left + position.width // 2
-                center_y = position.top + position.height // 2
-                pyautogui.click(center_x, center_y)
-                print("Imagem foi encontrada na tela.")
-                break
-        except Exception as e:
-            print("Imagem não encontrada na tela. Aguardando...")
-        try:
-            position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
-            if position2:
-                center_x = position2.left + position2.width // 2
-                center_y = position2.top + position2.height // 2
-                pyautogui.click(center_x, center_y)
-                print("Imagem foi encontrada na tela.")
-                break
-        except Exception as e:
-            print("Imagem não encontrada na tela. Aguardando...")
-        pyautogui.sleep(1)
-
 def click_ok(image_path,image_path2,image_path3, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -191,34 +163,6 @@ def imagem_encontrada(image_path, confidence=0.9, max_attempts=5):
                 return True
         except Exception as e:
             print("Nota não encontrada na tela. Aguardando...")
-        pyautogui.sleep(1)
-
-def botao_copy(image_path,image_path2, confidence=0.9):
-    current_dir = os.path.dirname(__file__)  # Diretório atual do script
-    caminho_imagem = caminho + r'\IMAGENS'
-    image_path = os.path.join(current_dir, caminho_imagem, image_path)
-    image_path2 = os.path.join(current_dir, caminho_imagem, image_path2)
-    while True:
-        try:
-            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
-            if position:
-                center_x = position.left + position.width // 2
-                center_y = position.top + position.height // 2
-                pyautogui.click(center_x, center_y)
-                print("Imagem foi encontrada na tela.")
-                break
-        except Exception as e:
-            print("Imagem não encontrada na tela. Aguardando...")
-        try:
-            position2 = pyautogui.locateOnScreen(image_path2, confidence=confidence)
-            if position2:
-                center_x = position2.left + position2.width // 2
-                center_y = position2.top + position2.height // 2
-                pyautogui.click(center_x, center_y)
-                print("Imagem foi encontrada na tela.")
-                break
-        except Exception as e:
-            print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
         
 def verificar_campo(image_name, confidence=0.9):
@@ -451,6 +395,46 @@ def click_info(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def click_registros(image_path, confidence=0.9):
+    current_dir = os.path.dirname(__file__)  # Diretório atual do script
+    caminho_imagem = caminho + r'\IMAGENS'
+    image_path = os.path.join(current_dir, caminho_imagem, image_path) 
+    while True:
+        try:
+            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+            if position:
+                center_x = position.left + position.width // 2
+                center_y = position.top + position.height // 2
+                pyautogui.moveTo(center_x, center_y)  # Movendo o cursor para a posição da imagem               
+                pyautogui.moveRel(- 120, -60)  # Movendo o cursor para cima
+                pyautogui.click(clicks=2)  # Clicando no local da imagem
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        pyautogui.sleep(1)
+
+def quantidade_registros():
+    pyautogui.sleep(5)   
+    click_registros('aguardando_liberacao.png')
+    pyperclip.copy('')  # Limpa o conteúdo copiado
+    pyautogui.sleep(2)
+    pyautogui.click(button='right')
+    pyautogui.sleep(1)
+    click_image('copy.png')
+    pyautogui.sleep(0.5)
+    try:
+        text = pyperclip.paste()  # Obtém o texto da área de transferência
+        qtd_registros = int(text)  # Converte o texto para um número inteiro
+        print("Quantidade de manifestos:", qtd_registros)
+    except ValueError:
+        print("O conteúdo copiado não é um número válido.")
+        qtd_registros = 0  # Define como None se a conversão falhar
+    except Exception as e:
+        print("Ocorreu um erro:", str(e))
+        qtd_registros = 0  # Define como None para qualquer outro erro
+    return qtd_registros
+
 def aviso_motorista(image_path, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -555,6 +539,52 @@ def is_numeric_or_empty(value):
 # Carregar a planilha
 Planilha_cc19 = pd.read_excel("Pasta2.xlsx")
 
+# Verificar se "Veículo" é uma coluna válida antes de usar
+if 'Veículo' not in Planilha_cc19.columns:
+    print("A coluna 'Veículo' não foi encontrada na planilha.")
+else:
+    # Criar um DataFrame com os nomes das colunas na primeira linha
+    df_colunas = pd.DataFrame([Planilha_cc19.columns], columns=Planilha_cc19.columns)
+
+    # Concatenar o DataFrame com a nova primeira linha
+    Planilha_cc19 = pd.concat([df_colunas, Planilha_cc19], ignore_index=True)
+
+    # Localiza onde a coluna tem o valor "Veículo"
+    index_veiculo = Planilha_cc19[Planilha_cc19['Veículo'] == 'Veículo'].index
+
+    # Função para exibir uma mensagem de sucesso
+    def show_success_message(msg):
+        root = tk.Tk()
+        root.withdraw()  # Oculta a janela principal
+        messagebox.showinfo("Lancamento Romaneio", msg)  # Exibe o título e a mensagem
+        root.destroy()  # Fecha a janela após exibir a mensagem
+
+    # Itera sobre os índices e verifica o valor da linha abaixo de cada "Veículo"
+    for idx in index_veiculo:
+        if idx + 1 < len(Planilha_cc19):
+            valor_abaixo = Planilha_cc19.loc[idx + 1, 'Veículo']
+            print(f"Valor abaixo de 'Veículo' na linha {idx}: {valor_abaixo}")
+
+            # Verifica se o valor abaixo é NaN
+            if pd.isna(valor_abaixo):
+                print(f"Não consta algum veículo na linha {idx + 1}.")
+                # Exibe a mensagem de alerta
+                show_success_message("Não consta algum veículo na relação.")
+                sys.exit()  # Para a execução do código
+            else:
+                # Se o valor for válido, define a flag como True
+                placa_encontrada = True
+        else:
+            print(f"Não há uma linha abaixo de 'Veículo' na linha {idx}.")
+
+    # Se nenhuma placa válida foi encontrada, exibe uma mensagem
+    if not placa_encontrada:
+        show_success_message("Nenhuma placa válida encontrada após 'Veículo'.")
+
+    # Simulando o final do código
+    if __name__ == "__main__":
+        sys.exit()  # Para a execução do código
+
 # Ajustar a coluna [Depósito] para as linhas onde [Depósito] está vazio e [Veículo] está preenchido
 Planilha_cc19.loc[Planilha_cc19['Depósito'].isna() & Planilha_cc19['Veículo'].notna(), 'Depósito'] = 'EMPRESA'
 
@@ -572,7 +602,7 @@ for coluna in colunas_para_manter_cc19:
 # Processar cada linha para preencher cidades e placas
 Planilha_cc19['Cidade'] = Planilha_cc19['Veículo'].apply(processar_cidade)
 Planilha_cc19['Placa'] = Planilha_cc19['Veículo'].apply(processar_veiculo_ou_cidade)
-
+print(Planilha_cc19['Placa'])
 # Preencher as placas nas linhas onde a cidade está definida
 Planilha_cc19['Placa'] = Planilha_cc19['Placa'].fillna(method='ffill')
 
@@ -708,8 +738,23 @@ pyautogui.sleep(0.5)
 click_image('faturamento_movimentacao_romaneio_carregamento.png')
 pyautogui.sleep(0.5)
 
-# Automatizar o lançamento de cada CTe individualmente
 for _, row in Planilha_romaneio.iterrows():
+    hora_atual = datetime.now().time()
+
+    if hora_atual.strftime("%H:%M") == "22:55":
+        print("Já são 22:55, esperar 15 minutos")
+        click_image('sair_sistema.png')
+        click_image('sair_sistema_logoff.png')
+        click_image('sair_sistema_logoff_sair.png')
+        
+        # Simulando o final do código
+        if __name__ == "__main__":  # Corrigido o nome da condição
+
+            # Aqui você pode adicionar seu código que será executado
+            show_success_message("Pausado por ser 23 horas, clique no ok quando logar na tela inicial!")
+    else:
+        print("Ainda não são 22:55.")
+
     placa_lancamento = row['PLACA']
     motorista_lancamento = row['NOME MOTORISTA']
     km_veiculo = row['KM']
@@ -747,7 +792,6 @@ for _, row in Planilha_romaneio.iterrows():
         
         if cidade in Planilha_cidades['Cidade Destino'].values:
             base_km = Planilha_cidades.loc[Planilha_cidades[Planilha_cidades['Cidade Destino'] == cidade].index.values, 'KM (origem Sumaré)'].values[0]
-        
         if base_km > km:
             km = base_km
             cidade_mais_longe = cidade
@@ -781,7 +825,6 @@ for _, row in Planilha_romaneio.iterrows():
         # Salvar a planilha
         df.to_excel(file_name, index=False)
         print(f"Número do romaneio {romaneio} e placa {placa_lancamento} salvos na planilha {file_name}.")
-
         continue  # Pula para a próxima iteração do for
 
     #COPIAR A PLACA TAMBEM E SALVAR
@@ -818,7 +861,6 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.click(button='right')
     pyautogui.sleep(1)
     click_image('copy.png')
-    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -837,7 +879,6 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.click(button='right')
     pyautogui.sleep(1)
     click_image('copy.png')
-    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -853,11 +894,9 @@ for _, row in Planilha_romaneio.iterrows():
     # Verifica se a placa está presente em base_nomes
     if placa in base_nomes['PLACA'].values:
         motorista_base = base_nomes.loc[base_nomes['PLACA'] == placa]
-
         for idx, row in motorista_base.iterrows():
             mot = row['MOTORISTA']
             cod_motorista_base = row['COD']
-
             # Comparando todos os nomes principais (case-insensitive)
             if nomes_se_correspondem(motorista_lancamento, mot):
                 print(f"Os nomes são correspondentes: {motorista_lancamento} e {mot}")
@@ -893,6 +932,41 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.sleep(5)
         click_image('atualizar.png')
         pyautogui.sleep(5)
+
+        click_image('aguardando_liberacao.png')
+        pyautogui.moveRel(0, - 100)  # Movendo o cursor para cima
+        pyautogui.click()  # Clicando no local da imagem
+        pyautogui.sleep(1)
+        for i in range(10):
+            pyautogui.press('down')
+        pyautogui.sleep(5)
+
+        qtd_registros = quantidade_registros()
+        qtd_registros = int(qtd_registros)
+        print(f'quantidade:{qtd_registros}')
+        if qtd_registros > 1:
+            romaneio = 'AJUSTAR NOME DO MOTORISTA'
+            # Verificar se o arquivo já existe
+            try:
+                df = pd.read_excel(file_name)
+            except FileNotFoundError:
+                # Criar um DataFrame com as colunas ROMANEIO e PLACA, caso o arquivo não exista
+                df = pd.DataFrame(columns=['DATA', 'ROMANEIO', 'PLACA', 'CIDADE'])
+            # Adicionar o número do romaneio e a placa à planilha
+            new_row = pd.DataFrame({'DATA': [agora_formatado], 'ROMANEIO': [romaneio], 'PLACA': [placa], 'CIDADE': [cidade_mais_longe]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            # Salvar a planilha
+            df.to_excel(file_name, index=False)
+            print(f"Número do romaneio {romaneio} e placa {placa} salvos na planilha {file_name}.")
+            # **Salvar os dados para reenvio de forma correta**
+            dados_para_reenvio.append({
+                'PLACA': placa,
+                'NOME MOTORISTA': motorista_lancamento,
+                'KM': km_veiculo,
+                'CTES': ctes_por_cidade  # Salvando como lista de listas
+            })
+            continue  # Pula para a próxima iteração do for
+            
         click_image('selecionar.png')
         pyautogui.sleep(2)
         pyautogui.press('tab')
@@ -908,7 +982,6 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.click(button='right')
         pyautogui.sleep(1)
         click_image('copy.png')
-        #botao_copy('copy2.png','copy_cinza.png')
         pyautogui.sleep(0.5)
         try:
             text = pyperclip.paste()
@@ -970,7 +1043,6 @@ for _, row in Planilha_romaneio.iterrows():
     pyautogui.click(button='right')
     pyautogui.sleep(1)
     click_image('copy.png')
-    #botao_copy('copy2.png','copy_cinza.png')
     pyautogui.sleep(0.5)
     try:
         text = pyperclip.paste()
@@ -1059,7 +1131,6 @@ for _, row in Planilha_romaneio.iterrows():
         pyautogui.sleep(5)
         click_image('efetuar.png')
         click_image('no.png')
-
         click_image('ok.png')
         #click_image('ok4.png')
         
