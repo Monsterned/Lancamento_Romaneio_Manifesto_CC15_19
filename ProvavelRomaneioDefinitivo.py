@@ -583,9 +583,9 @@ else:
     if not placa_encontrada:
         show_success_message("Nenhuma placa válida encontrada após 'Veículo'.")
 
-    # Simulando o final do código
-    if __name__ == "__main__":
-        sys.exit()  # Para a execução do código
+        # Simulando o final do código
+        if __name__ == "__main__":
+            sys.exit()  # Para a execução do código
 
 # Ajustar a coluna [Depósito] para as linhas onde [Depósito] está vazio e [Veículo] está preenchido
 Planilha_cc19.loc[Planilha_cc19['Depósito'].isna() & Planilha_cc19['Veículo'].notna(), 'Depósito'] = 'EMPRESA'
