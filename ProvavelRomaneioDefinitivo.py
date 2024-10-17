@@ -32,6 +32,20 @@ def click_image(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def iniciar_robo(image_path, confidence=0.9):
+    current_dir = os.path.dirname(__file__)  # Diretório atual do script
+    caminho_imagem = caminho + r'\IMAGENS'
+    image_path = os.path.join(current_dir, caminho_imagem, image_path)
+    while True:
+        try:
+            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+            if position:
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        pyautogui.sleep(1)
+
 def finalizar_baixa(image_path, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -731,6 +745,8 @@ pyautogui.sleep(2)
 b = 0
 c = False
 
+iniciar_robo('faturamento.png')
+pyautogui.sleep(5)
 click_image('faturamento.png')
 pyautogui.sleep(0.5)
 click_image('faturamento_movimentacao.png')
@@ -1163,8 +1179,8 @@ print("Automatização concluída com sucesso!")
 
 click_image('voltar.png')
 
-# Simulando o final do código
-if __name__ == "_main_":
-    # Aqui você pode adicionar seu código que será executado
-    # e ao final, chamará a função para exibir a mensagem
-    show_success_message("Robô finalizado com sucesso")
+
+
+
+show_success_message("Robô finalizado com sucesso")
+

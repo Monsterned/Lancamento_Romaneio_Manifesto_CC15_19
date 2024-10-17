@@ -29,6 +29,20 @@ def click_image(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def iniciar_robo(image_path, confidence=0.9):
+    current_dir = os.path.dirname(__file__)  # Diretório atual do script
+    caminho_imagem = caminho + r'\IMAGENS'
+    image_path = os.path.join(current_dir, caminho_imagem, image_path)
+    while True:
+        try:
+            position = pyautogui.locateOnScreen(image_path, confidence=confidence)
+            if position:
+                print("Imagem foi encontrada na tela.")
+                break
+        except Exception as e:
+            print("Imagem não encontrada na tela. Aguardando...")
+        pyautogui.sleep(1)
+
 def status_manifesto(image_path,image_path2,image_path3, confidence=0.9):
     current_dir = os.path.dirname(__file__)  # Diretório atual do script
     caminho_imagem = caminho + r'\IMAGENS'
@@ -303,6 +317,19 @@ def click_registros(image_path, confidence=0.9):
             print("Imagem não encontrada na tela. Aguardando...")
         pyautogui.sleep(1)
 
+def salvar_base_romaneio(mensagem):
+    caminho_do_arquivo = 'planilha_romaneio.xlsx'
+    nome_da_aba = 'Sheet1'
+    wb = load_workbook(caminho_do_arquivo)
+    ws = wb[nome_da_aba]
+    coluna_ost = 'H'  
+    if linha > ws.max_row:
+        ws[coluna_ost + str(linha_especifica)] = mensagem
+    else:
+        ws[coluna_ost + str(linha_especifica)] = mensagem
+    wb.save(caminho_do_arquivo)
+    wb.close()
+
 # Função para exibir uma mensagem de sucesso
 def show_success_message(msg):
     root = tk.Tk()
@@ -313,6 +340,8 @@ def show_success_message(msg):
 mudou = False
 Planilha_Manifesto = pd.read_excel("planilha_romaneio.xlsx")
 
+iniciar_robo('faturamento.png')
+pyautogui.sleep(5)
 click_image('faturamento.png')
 pyautogui.sleep(0.5)
 click_image('faturamento_movimentacao.png')
@@ -439,17 +468,7 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         pyautogui.sleep(1)  
         if qtd_registros is not None:
             if qtd_registros > 0:
-                caminho_do_arquivo = 'planilha_romaneio.xlsx'
-                nome_da_aba = 'Sheet1'
-                wb = load_workbook(caminho_do_arquivo)
-                ws = wb[nome_da_aba]
-                coluna_ost = 'H'  
-                if linha > ws.max_row:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO'
-                else:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO'
-                wb.save(caminho_do_arquivo)
-                wb.close()
+                salvar_base_romaneio('ULTIMO MANIFESTO EM ABERTO')
                 print('Manifesto em aberto')
                 print('Ir para o próximo')  
                 continue
@@ -460,17 +479,7 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         qtd_registros = quantidade_registros()
         if qtd_registros is not None:
             if qtd_registros > 0:
-                caminho_do_arquivo = 'planilha_romaneio.xlsx'
-                nome_da_aba = 'Sheet1'
-                wb = load_workbook(caminho_do_arquivo)
-                ws = wb[nome_da_aba]
-                coluna_ost = 'H'  
-                if linha > ws.max_row:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO'
-                else:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO'
-                wb.save(caminho_do_arquivo)
-                wb.close()
+                salvar_base_romaneio('ULTIMO MANIFESTO EM ABERTO')
                 print('Manifesto em aberto')
                 print('Ir para o próximo')  
                 continue
@@ -481,17 +490,8 @@ for i, linha in enumerate(Planilha_Manifesto.index):
         qtd_registros = quantidade_registros()
         if qtd_registros is not None:
             if qtd_registros > 0:
+                salvar_base_romaneio('ULTIMO MANIFESTO EM ABERTO INCONSISTENTE')
                 caminho_do_arquivo = 'planilha_romaneio.xlsx'
-                nome_da_aba = 'Sheet1'
-                wb = load_workbook(caminho_do_arquivo)
-                ws = wb[nome_da_aba]
-                coluna_ost = 'H'  
-                if linha > ws.max_row:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO INCONSISTENTE'
-                else:
-                    ws[coluna_ost + str(linha_especifica)] = 'ULTIMO MANIFESTO EM ABERTO INCONSISTENTE'
-                wb.save(caminho_do_arquivo)
-                wb.close()
                 print('Manifesto em aberto')
                 print('Ir para o próximo')  
                 continue
@@ -545,10 +545,6 @@ for i, linha in enumerate(Planilha_Manifesto.index):
 
 click_image('buscar_voltar.png')
 
+click_image('voltar.png')
 
-
-# Simulando o final do código
-if __name__ == "_main_":
-    # Aqui você pode adicionar seu código que será executado
-    # e ao final, chamará a função para exibir a mensagem
-    show_success_message("Robô finalizado com sucesso")
+show_success_message("Robô finalizado com sucesso")
